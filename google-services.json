@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "880871044112",
+    "project_id": "mexpo-999f1",
+    "storage_bucket": "mexpo-999f1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:880871044112:android:d1436dcaedd66dca410695",
+        "android_client_info": {
+          "package_name": "com.mexpo.fiverrtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "880871044112-iajpl1f6pcai3sll6eiop5b1ftb4pkds.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDN2mtzo-BaznwJOf02o3IfLi6JMN1zI9Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "880871044112-1hgqtpi9kprjbqhofmijv6c14d0g2ga6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
