@@ -60,10 +60,12 @@ async function sendNotification(userId) {
       // Prepare the notification payload
       const notification = {
         notification: {
-          title: 'fiverr test notification',
+          title: `A quote from ${randomMessage.quoteAuthor} `,
           body: randomMessage.quote,
         },
         data: {
+          title: `${randomMessage.quoteAuthor} : ${randomMessage.quote}`,
+          body: randomMessage.quote,
           submittedBy: randomMessage.submittedBy,
           quoteAuthor: randomMessage.quoteAuthor,
         },

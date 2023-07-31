@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, StyleSheet, Text, View } from 'react-native';
 import SignInScreen from './screens/SignInScreen';
 import * as Google from 'expo-auth-session/providers/google'
 import * as WebBrowser from 'expo-web-browser'
@@ -22,9 +22,7 @@ Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
- 
-    shouldSetBadge: true, // Set the badge on the app icon
-
+    shouldSetBadge: false,
   }),
 });
 
@@ -84,24 +82,81 @@ export default function App() {
     }
   }
 
+  const displaySimpleNotification = async (title, body) => {
+    await Notifications.scheduleNotificationAsync({
+      content: {
+        title: title,
+        body: body,
+      },
+      trigger: null, // Immediately show the notification
+    });
+  
+    // console.log('Scheduled notification with ID:', notificationId);
+  };
+  
+  // Call the displaySimpleNotification function to show the notification
+
+  // display blank one
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-
+  
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-      console.log(notification);
-
+      const remoteMessage = notification?.request?.trigger?.remoteMessage;
+      
+      if (remoteMessage) {
+        const notificationData = remoteMessage.notification;
+        console.log("Received notification:", notificationData);
+  
+        // Display the received notification as an in-app alert
+        Alert.alert(notificationData.title, notificationData.body);
+      } else {
+        console.log("Received notification with no content.");
+      }
     });
-
+  
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
+      console.log("Notification response:", response);
     });
-
+  
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
   }, []);
+  
+  
+
+
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  
+  //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+  //     const notificationObject = notification?.request?.trigger?.remoteMessage?.notification;
+  
+  //     setNotification(notificationObject);
+  //     if (notificationObject) {
+  //       console.log("Received notification:", notificationObject);
+  
+  //       // Display the received notification as an in-app alert
+  //       Alert.alert(notificationObject.title, notificationObject.body);
+  //       displaySimpleNotification(notificationObject.title , notificationObject?.body)
+  //     } else {
+  //       console.log("Received notification with no content.");
+  //     }
+  //   });
+  
+  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+  //     console.log("Notification response:", response);
+  //   });
+  
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(notificationListener.current);
+  //     Notifications.removeNotificationSubscription(responseListener.current);
+  //   };
+  // }, []);
+
+  
 
   const checkLocalUser =  async () => {
     try {
@@ -169,21 +224,6 @@ const styles = StyleSheet.create({
 });
 
 
-
-
-async function schedulePushNotification() {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
-      
-    },
-    trigger: { seconds: 4 },
-    badge: 1, // Set the badge number here
-
-  });
-}
 
 async function registerForPushNotificationsAsync() {
   let token;
